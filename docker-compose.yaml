@@ -1,0 +1,11 @@
+services:
+  db:
+    image: postgres
+
+    ports:
+      - 5432:5432
+
+    environment:
+      POSTGRES_PASSWORD: test
+      POSTGRES_USER: test
+      POSTGRES_DB: file-vault
