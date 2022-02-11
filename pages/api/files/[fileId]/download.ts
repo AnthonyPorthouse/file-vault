@@ -2,11 +2,9 @@ import nc from "next-connect";
 import { NextApiRequest, NextApiResponse } from "next";
 import { StatusCodes } from "http-status-codes";
 import argon2 from "argon2";
-import { PrismaClient } from "@prisma/client";
 import { isBefore } from "date-fns";
 import * as fs from "fs";
-
-const prisma = new PrismaClient();
+import prisma from "../../../../utils/prisma";
 
 const handler = nc<NextApiRequest, NextApiResponse>({
   onNoMatch: (req, res) => {
@@ -41,7 +39,8 @@ handler.get(async (req, res) => {
 
   await updateRemainingDownloads(file);
 
-  res
+  return res
+    .status(StatusCodes.OK)
     .setHeader("Content-Disposition", [
       "attachment",
       `filename=${file.filename}`,

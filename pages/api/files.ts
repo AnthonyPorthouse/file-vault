@@ -1,12 +1,10 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { StatusCodes } from "http-status-codes";
-import { PrismaClient } from "@prisma/client";
 import { parse } from "iso8601-duration";
 import { add } from "date-fns";
 import { v4 as uuidV4 } from "uuid";
 import argon2 from "argon2";
-
-const prisma = new PrismaClient();
+import prisma from "../../utils/prisma";
 
 interface NewFileRequest {
   description: string;

@@ -1,11 +1,9 @@
 import nc from "next-connect";
 import { NextApiRequest, NextApiResponse } from "next";
 import { StatusCodes } from "http-status-codes";
-import { PrismaClient } from "@prisma/client";
 import path from "path";
 import multer from "multer";
-
-const prisma = new PrismaClient();
+import prisma from "../../../utils/prisma";
 
 const upload = multer({
   dest: path.join(__dirname, "..", "..", "..", "storage"),
