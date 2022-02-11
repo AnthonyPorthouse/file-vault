@@ -6,11 +6,24 @@ import { isBefore } from "date-fns";
 import * as fs from "fs";
 import prisma from "../../../../utils/prisma";
 
+import cors from "cors";
+
 const handler = nc<NextApiRequest, NextApiResponse>({
   onNoMatch: (req, res) => {
     return res.status(StatusCodes.NOT_FOUND).send(null);
   },
 });
+
+const corsReq = cors({
+  origin: "*",
+  allowedHeaders: "*",
+  exposedHeaders: ["Content-Disposition"],
+  credentials: true,
+});
+
+handler.use(corsReq);
+
+handler.options(corsReq);
 
 handler.get(async (req, res) => {
   const { fileId } = <{ fileId: string }>req.query;
@@ -41,10 +54,7 @@ handler.get(async (req, res) => {
 
   return res
     .status(StatusCodes.OK)
-    .setHeader("Content-Disposition", [
-      "attachment",
-      `filename=${file.filename}`,
-    ])
+    .setHeader("Content-Disposition", `attachment; filename=${file.filename}`)
     .send(fs.readFileSync(file.storagePath));
 });
 

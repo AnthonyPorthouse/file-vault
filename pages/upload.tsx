@@ -1,5 +1,6 @@
 import { NextPage } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import { SyntheticEvent, useRef, useState } from "react";
 
 interface FileId {
@@ -14,6 +15,8 @@ const Upload: NextPage = () => {
   const [password, setPassword] = useState<string>("");
   const [duration, setDuration] = useState<string>("");
   const [maxDownloads, setMaxDownloads] = useState<string>("0");
+
+  const [upload, setUpload] = useState<{ id: string }>();
 
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
 
@@ -35,6 +38,9 @@ const Upload: NextPage = () => {
     ).json();
 
     const file = await uploadFile(fileUploadRequest.id as string);
+    if (file) {
+      setUpload(await file.json());
+    }
   };
 
   const createFileUploadRequest = async (
@@ -71,6 +77,17 @@ const Upload: NextPage = () => {
       body: formData,
     });
   };
+
+  if (upload) {
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center bg-gray-200 py-2">
+        <main className="rounded bg-white px-8 py-6 shadow-md">
+          File Uploaded:{" "}
+          <Link href={`/download/${upload.id}`}>Download Here</Link>
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-gray-200 py-2">
